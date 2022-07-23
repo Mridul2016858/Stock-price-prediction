@@ -1,0 +1,38 @@
+import pandas as pd
+import numpy as np
+amazon=pd.read_csv("Amazon.csv")
+amazon
+amazon.isna().sum()
+del amazon["Date"]
+del amazon["Adj Close"]
+print(amazon.shape)
+amazon
+Y=np.array([amazon.Close])
+Y=Y.T
+Y.shape
+del amazon["Close"]
+amazon
+#it will create 2d array
+X=amazon.values
+X.shape
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+x_train,x_test,y_train,y_test=train_test_split(X,Y,random_state=0)
+x_train.shape,x_test.shape,y_train.shape,y_test.shape
+clf=LinearRegression()
+clf.fit(x_train,y_train)
+#predict function gives the predicted value using x values
+y_predict=clf.predict(x_test)
+clf.score(x_test,y_test)
+open_=float(input("Enter opening Price :"))
+high_=float(input("Enter highest Price :"))
+low_=float(input("Enter lowest Price :"))
+volume_=int(input("Enter total volume :"))
+if high_ < low_:
+    print("Low price has to be higher than high")
+elif open_<0 or high_<0 or low_<0 or volume_<0:
+    print("Price can't be negative")
+else:
+    test_=np.array([[open_,high_,low_,volume_]])
+    pred=clf.predict(test_)
+    print("The approx closing price is : ",pred[0])
